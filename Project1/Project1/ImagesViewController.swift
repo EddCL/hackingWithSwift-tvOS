@@ -10,13 +10,15 @@ import UIKit
 
 class ImagesViewController: UIViewController {
     
+    var category = ""
+    var appID = "54f120f6298ae8773e64179b1f8732845894d43b58fc58a7b76ade345ce51725"
+    
     @IBOutlet var spinner: UIActivityIndicatorView!
     @IBOutlet var creditLabel: UILabel!
-    //p135 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
     }
 
 

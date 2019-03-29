@@ -23,6 +23,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: "Images") as? ImagesViewController else{return}
+        
+        vc.category = categories[indexPath.row]
+        present(vc, animated: true)
+    }
+    
 
 }
 
