@@ -13,6 +13,7 @@ class ImagesViewController: UIViewController {
     var category = ""
     var imageViews = [UIImageView]()
     var images = [JSON]()
+    var imageCounter = 0 //p152  If that works...
     var appID = "54f120f6298ae8773e64179b1f8732845894d43b58fc58a7b76ade345ce51725"
     
     @IBOutlet var spinner: UIActivityIndicatorView!
@@ -34,11 +35,15 @@ class ImagesViewController: UIViewController {
     }
     
     func fetch(_ url: URL){
-        
+        if let data = try? Data(contentsOf: url){
+            let json = JSON(data)
+            images = json["results"].arrayValue
+            downloadImage()
+        }
     }
     
     func downloadImage(){
-        
+        print(images)
     }
 
 
