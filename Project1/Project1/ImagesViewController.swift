@@ -13,7 +13,7 @@ class ImagesViewController: UIViewController {
     var category = ""
     var imageViews = [UIImageView]()
     var images = [JSON]()
-    var imageCounter = 0 //p152  If that works...
+    var imageCounter = 0
     var appID = "54f120f6298ae8773e64179b1f8732845894d43b58fc58a7b76ade345ce51725"
     
     @IBOutlet var spinner: UIActivityIndicatorView!
@@ -31,7 +31,7 @@ class ImagesViewController: UIViewController {
         
         DispatchQueue.global(qos: .userInteractive).async {
             self.fetch(url)
-        } //p148
+        }
     }
     
     func fetch(_ url: URL){
@@ -43,7 +43,64 @@ class ImagesViewController: UIViewController {
     }
     
     func downloadImage(){
-        print(images)
+        //figure out what image to display
+        let currentImage = images[imageCounter % images.count]
+        
+        //find its image URL and user credit
+        let imageName = currentImage["url"]["full"].stringValue
+        let imageCredit = currentImage["user"]["name"].stringValue
+        
+        //add 1 to imageCounter so next time we load the following image
+        imageCounter += 1
+        
+        //convert it to a Swift URL and download it
+        guard let imageURL = URL(string: imageName) else {return}
+        guard let imageData = try? Data(contentsOf: imageURL) else {return}
+        
+        
+        //convert the Data to a UIImage
+        guard let image = UIImage(data: imageData) else {return}
+        
+        //push our work to the main thread
+        DispatchQueue.main.async {
+            //display it in the first image view, and update the image credit label
+            self.show(image, credit: imageCredit)
+        }
+    }
+    
+    func show(_ image: UIImage, credit: String){
+        //stop the activity indicator animation
+        spinner.stopAnimating()
+        
+        //figure out which view to activate and deactivate
+        let imageViewToUse = imageViews[imageCounter % imageViews.count]
+        let otherImageView = imageViews[(imageCounter + 1) % imageViews.count]
+        
+        //start an animation over 2 seconds
+        UIView.animate(withDuration: 2.0, animations: {
+            //make the image view use our image, and alpha it up to 1
+            imageViewToUse.image = image
+            imageViewToUse.alpha = 1
+            
+            //fade out the credit label to avoid it looking wrong
+            self.creditLabel.alpha = 0
+            
+            //move the deactivated image view to the back, behind the activated one
+            self.view.sendSubviewToBack(otherImageView)
+        }) { _ in
+            self.creditLabel.text = " \(credit.uppercased())"
+            self.creditLabel.alpha = 1
+            
+            otherImageView.alpha = 0
+            otherImageView.transform = .identity
+            
+            UIView.animate(withDuration: 10.0, animations: { imageViewToUse.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+            }) { _ in
+                DispatchQueue.global(qos: .userInteractive).async {
+                    self.downloadImage()
+                }
+            }
+        }
     }
 
 
