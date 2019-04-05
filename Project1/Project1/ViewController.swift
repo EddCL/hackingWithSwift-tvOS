@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var categories = ["Airplanes", "Beaches", "Bridges", "Cats", "Cities", "Dogs", "Earth", "Forests", "Galaxies", "Landmarks", "Mountains", "People", "Roads", "Sports", "Sunsets"]
     
@@ -30,7 +30,5 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         vc.category = categories[indexPath.row]
         present(vc, animated: true)
     }
-    
-
 }
 
