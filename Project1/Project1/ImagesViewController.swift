@@ -46,7 +46,7 @@ class ImagesViewController: UIViewController {
         let currentImage = images[imageCounter % images.count]
         
         //find its image URL and user credit
-        let imageName = currentImage["url"]["full"].stringValue
+        let imageName = currentImage["urls"]["full"].stringValue
         let imageCredit = currentImage["user"]["name"].stringValue
         
         //add 1 to imageCounter so next time we load the following image
