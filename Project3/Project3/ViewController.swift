@@ -28,8 +28,26 @@ class ViewController: UIViewController {
         focusGuide.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         focusGuide.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
+        focusGuide.preferredFocusEnvironments = [nextButton]
     }
+    
+    override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
+        super.didUpdateFocus(in: context, with: coordinator)
+        
+        //if moving towards the text field
+        if context.nextFocusedView == textField{
+            //tell to redirect to next button
+            focusGuide.preferredFocusEnvironments = [nextButton]
+        } else if context.nextFocusedView == nextButton {
+            //tell to redirect to text field
+            focusGuide.preferredFocusEnvironments = [textField]
+        }
+    }
+    
+    
 
+    //p192
+    
     @IBAction func showAlert(_ sender: UIButton) {
     }
     
